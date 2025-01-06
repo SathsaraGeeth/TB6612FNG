@@ -1,15 +1,20 @@
 #ifndef TB6612_H
 #define TB6612_H
 
+#include <stdint.h>
+
 
 #define MAX_FPWM 100000
 #define DEAD_TIME 2
 
 /* function pointers for hardware control */
-extern void (*set_pin)(int pin, int state); // state -> 1: ON, 0: OFF
-extern void (*start_pwm)(int pin, int frequency); // frequency in Hz
+extern void (*set_pin)(pin_t pin, int state); // state -> 1: ON, 0: OFF
+extern void (*start_pwm)(pin_t pin, int frequency); // frequency in Hz
 /* NOOP */
 extern void (*noop)(int time); // time in nano seconds
+
+/* pin type */
+typedef uint8_t pin_t;
 
 typedef struct {
     int FPWM;
@@ -17,16 +22,16 @@ typedef struct {
 } load_settings;
 
 typedef struct {
-    int IN1;
-    int IN2;
-    int PWM;
+    pin_t IN1;
+    pin_t IN2;
+    pin_t PWM;
     load_settings settings;
 } load;
 
 typedef struct {
     load LOAD1;
     load LOAD2;
-    int STBY;
+    pin_t STBY;
 } tb6612_driver;
 
 /**
