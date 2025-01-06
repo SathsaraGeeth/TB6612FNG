@@ -22,7 +22,7 @@ void load_init(load* load){
     if (load->settings.FPWM <= MAX_FPWM){
         start_pwm(load->PWM, load->load_settings.FPWM);
     } else{
-        start_pwm(loa->PWM, MAX_FPWM); // if the FPWM is too high cap it at the MAX_FPWM
+        start_pwm(load->PWM, MAX_FPWM); // if the FPWM is too high cap it at the MAX_FPWM
     }
 }
 void update_load_settings(load* load, load_settings* new_settings){
@@ -43,5 +43,5 @@ void load_stop(load* load){
     set_pin(load->PWM, 1); // or start_pwm(load->PWM, 0); 
 }
 void tb6612_driver_off(tb6612_driver* driver){
-    HAL_GPIO_WritePin(/* port */, driver->STBY, GPIO_PIN_RESET);
+    set_pin(driver->STBY, 0);
 }
