@@ -13,7 +13,7 @@ extern void (*noop)(int time); // time in nano seconds
 
 typedef struct {
     int FPWM;
-    int INV_POL;
+    int INV_POL; // 1: reverse the direction, 0: keep the same direction
 } load_settings;
 
 typedef struct {
