@@ -40,7 +40,7 @@ void load_short_break(load* load){
 void load_stop(load* load){
     set_pin(load->IN1, 0);
     set_pint(load->IN2, 0);
-    set_pin(load->PWM, 1); // or start_pwm(load->PWM, 0); 
+    start_pwm(load->PWM, 0); 
 }
 void tb6612_driver_off(tb6612_driver* driver){
     set_pin(driver->STBY, 0);
