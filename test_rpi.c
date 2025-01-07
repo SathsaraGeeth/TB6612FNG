@@ -1,55 +1,53 @@
-#include <pigpio.h>
+#include "gpio.h"
 #include "tb6612fng.h"
-#include <stdio.h>
 #include <unistd.h>
 
 #define AIN1 12
 #define AIN2 16
 #define APWM 18
-#define STBY 20
+#define STBY_PIN 20
 
-void set_pin_impl(pin_t pin, int state);
-void start_pwm_impl(pin_t pin, int frequency);
-void noop_impl(int time);
+void set_pin(pin_t pin, int state){
+    digitalWrite(pin, state);
+}
+
+void start_pwm(pin_t pin, int frequency) {
+    if (frequency == 0) {
+        digitalWrite(pin, 1);
+        return;
+    }
+    int period = 1000000000 / frequency; //in ns
+    int half_period = period / 2;
+    while (1) {
+        digitalWrite(pin, 1);
+        noop(half_period);
+        digitalWrite(pin, 0);
+        noop(half_period);
+    }
+}
+
+void noop(int time){
+    usleep(time / 1000);
+}
 
 int main(){
-    if (gpioInitialise() < 0) {
-        printf("GPIO initialization failed!\n");
-        return 1;
-    }
-
-    // setup gpio pins
-    gpioSetMode(AIN1, PI_OUTPUT);
-    gpioSetMode(AIN2, PI_OUTPUT);
-    gpioSetMode(APWM, PI_OUTPUT);
-    gpioSetMode(STBY, PI_OUTPUT);
-
-    // Assign function pointers to implementations
-    set_pin = set_pin_impl;
-    start_pwm = start_pwm_impl;
-    noop = noop_impl;
-    
-    // initialize driver and load
-    tb6612fng_driver driver;
-    load loadA = {AIN1, AIN2, APWM, {0, 0}};
-    
-    // init driver and load
+    tb6612fng_driver driver = {.STBY = STBY_PIN};
+    load loadA = add_load(&driver, AIN1, AIN2, APWM);
     tb6612fng_driver_init(&driver);
+
     load_init(&loadA);
+    load_settings new_settings = {0.55, 0};
+    update_load_settings(&loadA, &new_settings);
+    usleep(100000);
 
-    gpioTerminate();
+    load_settings new_settings1 = {0.33, 1};
+    update_load_settings(&loadA, &new_settings1);
+    usleep(100000);
+
+    load_stop(&loadA);
+
+    tb6612fng_driver_off(&driver);
+
+
     return 0;
-}
-
-void set_pin_impl(pin_t pin, int state){
-    gpioWrite(pin, state);
-}
-
-void start_pwm_impl(pin_t pin, int frequency){
-    int pwm_val = 0; // to test
-    gpioPWM(pin, pwm_val);
-}
-
-void noop_impl(int time){
-    usleep(time / 1000);
 }
