@@ -7,14 +7,14 @@
 #define MAX_FPWM 100000
 #define DEAD_TIME 2
 
+/* pin type */
+typedef uint8_t pin_t;
+
 /* function pointers for hardware control */
 extern void (*set_pin)(pin_t pin, int state); // state -> 1: ON, 0: OFF
 extern void (*start_pwm)(pin_t pin, int frequency); // frequency in Hz
 /* NOOP */
 extern void (*noop)(int time); // time in nano seconds
-
-/* pin type */
-typedef uint8_t pin_t;
 
 typedef struct {
     int FPWM;

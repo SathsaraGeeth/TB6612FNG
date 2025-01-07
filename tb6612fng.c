@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 void (*set_pin)(pin_t pin, int state) = NULL;
-void (*start_pwm)(pin_t pwm, int frequency) = NULL;
+void (*start_pwm)(pin_t pin, int frequency) = NULL;
 void (*noop)(int time) = NULL;
 
 void tb6612fng_driver_init(tb6612fng_driver* driver){
@@ -39,7 +39,7 @@ void load_short_break(load* load){
 }
 void load_stop(load* load){
     set_pin(load->IN1, 0);
-    set_pint(load->IN2, 0);
+    set_pin(load->IN2, 0);
     start_pwm(load->PWM, 0); 
 }
 void tb6612fng_driver_off(tb6612fng_driver* driver){
