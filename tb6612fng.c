@@ -1,4 +1,4 @@
-#include "tb6612.h"
+#include "tb6612fng.h"
 #include <stdio.h>
 
 void (*set_pin)(int pin, int state) = NULL;
