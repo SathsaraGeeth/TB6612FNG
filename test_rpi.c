@@ -8,9 +8,9 @@
 #define APWM 18
 #define STBY 20
 
-void set_pin(pin_t pin, int state);
-void start_pwm(pin_t pin, int frequency);
-void noop(pin_t time);
+void set_pin_impl(pin_t pin, int state);
+void start_pwm_impl(pin_t pin, int frequency);
+void noop_impl(int time);
 
 int main(){
     if (gpioInitialise() < 0) {
@@ -23,6 +23,11 @@ int main(){
     gpioSetMode(AIN2, PI_OUTPUT);
     gpioSetMode(APWM, PI_OUTPUT);
     gpioSetMode(STBY, PI_OUTPUT);
+
+    // Assign function pointers to implementations
+    set_pin = set_pin_impl;
+    start_pwm = start_pwm_impl;
+    noop = noop_impl;
     
     // initialize driver and load
     tb6612fng_driver driver;
@@ -36,15 +41,15 @@ int main(){
     return 0;
 }
 
-void set_pin(pin_t pin, int state){
+void set_pin_impl(pin_t pin, int state){
     gpioWrite(pin, state);
 }
 
-void start_pwm(pin_t pin, int frequency){
+void start_pwm_impl(pin_t pin, int frequency){
     int pwm_val = 0; // to test
     gpioPWM(pin, pwm_val);
 }
 
-void noop(int time){
+void noop_impl(int time){
     usleep(time / 1000);
 }
