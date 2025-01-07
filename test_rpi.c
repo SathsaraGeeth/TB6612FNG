@@ -1,49 +1,50 @@
-#include <wiringPi.h>
+#include <pigpio.h>
 #include "tb6612fng.h"
 #include <stdio.h>
 #include <unistd.h>
 
+#define AIN1 32 // 12
+#define AIN2 36 // 16
+#define APWM 12 // 18
+#define STBY 38 // 20
 
-#define AIN1 32
-#define AIN2 36
-#define APWM 12
-#define STBY 38
-
-void set_pin(pin_t, int state);
-void start_pwm(pint_t, int frequency;
+void set_pin(int pin, int state);
+void start_pwm(int pin, int frequency);
 void noop(int time);
 
 int main(){
-	// setup gpio pins
-	pinMode(AIN1, OUTPUT);
-	pinMode(AIN2, OUTPUT);
-	pinMode(APWM, PWM_OUTPUT);
-	pinMode(STBY, OUTPUT);
-	
-	//intialize driver and load
-	tb6612fng_driver driver;
-	load loadA = {AIN1, AIN2, PWM_PIN,{0, 0}};
-	
-	// init driver and load
-	tb6612fng_driver_init(&driver);
-	load_init(&loadA);
+    if (gpioInitialise() < 0) {
+        printf("GPIO initialization failed!\n");
+        return 1;
+    }
 
-	return 0;
+    // setup gpio pins
+    gpioSetMode(AIN1, PI_OUTPUT);
+    gpioSetMode(AIN2, PI_OUTPUT);
+    gpioSetMode(APWM, PI_OUTPUT);
+    gpioSetMode(STBY, PI_OUTPUT);
+    
+    // initialize driver and load
+    tb6612fng_driver driver;
+    load loadA = {AIN1, AIN2, APWM, {0, 0}};
+    
+    // init driver and load
+    tb6612fng_driver_init(&driver);
+    load_init(&loadA);
+
+    gpioTerminate();
+    return 0;
 }
 
-void set_pin(pin_t pin, int state){
-	if (state){
-		digitalWrite(pin, HIGH);
-	}else{
-		digitalWrite(pin, LOW);
-	}
+void set_pin(int pin, int state){
+    gpioWrite(pin, state);
 }
 
-void start_pwm(pin_t pin, int frequency){
-	pwm_val = 0; // to test
-	pwmWrite(pin, pwm_val);
+void start_pwm(int pin, int frequency){
+    int pwm_val = 0; // to test
+    gpioPWM(pin, pwm_val);
 }
 
 void noop(int time){
-	usleep(tim/1000);
+    usleep(time / 1000);
 }
