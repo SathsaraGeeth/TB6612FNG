@@ -3,10 +3,10 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#define AIN1 32 // 12
-#define AIN2 36 // 16
-#define APWM 12 // 18
-#define STBY 38 // 20
+#define AIN1 12
+#define AIN2 16
+#define APWM 18
+#define STBY 20
 
 void set_pin(int pin, int state);
 void start_pwm(int pin, int frequency);
