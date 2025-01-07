@@ -8,9 +8,9 @@
 #define APWM 18
 #define STBY 20
 
-void set_pin(int pin, int state);
-void start_pwm(int pin, int frequency);
-void noop(int time);
+void set_pin(pin_t pin, int state);
+void start_pwm(pin_t pin, int frequency);
+void noop(pin_t time);
 
 int main(){
     if (gpioInitialise() < 0) {
@@ -36,11 +36,11 @@ int main(){
     return 0;
 }
 
-void set_pin(int pin, int state){
+void set_pin(pin_t pin, int state){
     gpioWrite(pin, state);
 }
 
-void start_pwm(int pin, int frequency){
+void start_pwm(pin_t pin, int frequency){
     int pwm_val = 0; // to test
     gpioPWM(pin, pwm_val);
 }

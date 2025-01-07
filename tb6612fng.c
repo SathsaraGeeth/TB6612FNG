@@ -27,12 +27,12 @@ void load_init(load* load){
 }
 void update_load_settings(load* load, load_settings* new_settings){
     load->settings = *new_settings;
-    load_stop(load* load);
+    load_stop(load);
     noop(DEAD_TIME);
-    load_init(load* load);
+    load_init(load);
 }
 void load_short_break(load* load){
-    load_stop(load* load);
+    load_stop(load);
     noop(DEAD_TIME);
     set_pin(load->IN1, 1);
     set_pin(load->IN2, 1);
