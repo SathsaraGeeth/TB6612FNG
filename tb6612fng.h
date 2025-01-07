@@ -32,14 +32,14 @@ typedef struct {
     load LOAD1;
     load LOAD2;
     pin_t STBY;
-} tb6612_driver;
+} tb6612fng_driver;
 
 /**
  * @brief Initializes the driver with default settings.
  * 
- * @param driver Pointer to the tb6612_driver struct.
+ * @param driver Pointer to the tb6612fng_driver struct.
  */
-void tb6612_driver_init(tb6612_driver* driver);
+void tb6612fng_driver_init(tb6612fng_driver* driver);
 
 /**
  * @brief Initializes the load on with specified settings.
@@ -75,7 +75,7 @@ void load_stop(load* load);
  * 
  * @param driver Pointer to the TB6612 driver structure.
  */
-void tb6612_driver_off(tb6612_driver* driver);
+void tb6612fng_driver_off(tb6612fng_driver* driver);
 
 
 #endif // TB6612_H

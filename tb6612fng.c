@@ -1,11 +1,11 @@
 #include "tb6612fng.h"
 #include <stdio.h>
 
-void (*set_pin)(int pin, int state) = NULL;
-void (*start_pwm)(int pwm, int frequency) = NULL;
+void (*set_pin)(pin_t pin, int state) = NULL;
+void (*start_pwm)(pin_t pwm, int frequency) = NULL;
 void (*noop)(int time) = NULL;
 
-void tb6612_driver_init(tb6612_driver* driver){
+void tb6612fng_driver_init(tb6612fng_driver* driver){
     load_settings DEFALUT_SETTINGS = {0, 0};
     driver->LOAD1.settings = DEFALUT_SETTINGS;
     driver->LOAD2.settings = DEFALUT_SETTINGS;
@@ -20,7 +20,7 @@ void load_init(load* load){
         set_pin(load->IN2, 1);
     };
     if (load->settings.FPWM <= MAX_FPWM){
-        start_pwm(load->PWM, load->load_settings.FPWM);
+        start_pwm(load->PWM, load->settings.FPWM);
     } else{
         start_pwm(load->PWM, MAX_FPWM); // if the FPWM is too high cap it at the MAX_FPWM
     }
@@ -42,6 +42,6 @@ void load_stop(load* load){
     set_pint(load->IN2, 0);
     start_pwm(load->PWM, 0); 
 }
-void tb6612_driver_off(tb6612_driver* driver){
+void tb6612fng_driver_off(tb6612fng_driver* driver){
     set_pin(driver->STBY, 0);
 }
