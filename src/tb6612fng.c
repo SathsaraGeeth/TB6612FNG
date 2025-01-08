@@ -16,7 +16,6 @@
 load_settings DEFAULT_SETTINGS = {.DUTY_CYCLE = 1, .FPWM = MAX_FPWM, .INV_POL = 0};
 
 load add_load(tb6612fng_driver* driver, const pin_t in1, const pin_t in2, const pin_t pwm) {
-    printf("add_load\n");
     if (driver->num_loads < MAX_LOADS) {
         set_pin(in1,0);
         set_pin(in2, 0);
@@ -28,11 +27,9 @@ load add_load(tb6612fng_driver* driver, const pin_t in1, const pin_t in2, const 
     return (load){0}; // return a placeholder default load
 }
 void tb6612fng_driver_init(tb6612fng_driver* driver){
-    printf("tb6612fng_driver_init called\n");
     set_pin(driver->STBY,1);
 }
 void load_init(load* load) {
-    printf("load_init\n");
     if (!load->settings.INV_POL){
         set_pin(load->IN1, 1);
         set_pin(load->IN2, 0);
@@ -47,26 +44,22 @@ void load_init(load* load) {
     }
 }
 void update_load_settings(load* load, load_settings* new_settings){
-    printf("updating load settings\n");
     load->settings = *new_settings;
     load_stop(load);
     noop(DEAD_TIME); // to prevent penetrating currents
     load_init(load);
 }
 void load_short_break(load* load){
-    printf("load_short_break\n");
     load_stop(load);
     noop(DEAD_TIME);  // to prevent penetrating currents
     set_pin(load->IN1, 1);
     set_pin(load->IN2, 1);
 }
 void load_stop(load* load){
-    printf("load_stop\n");
     set_pin(load->IN1, 0);
     set_pin(load->IN2, 0);
     start_pwm(load->PWM, load->settings.FPWM, 1);
 }
 void tb6612fng_driver_off(tb6612fng_driver* driver){
-    printf("tb6612fng_driver_off\n");
 	set_pin(driver->STBY, 0);
 }
