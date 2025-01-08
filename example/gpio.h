@@ -1,3 +1,6 @@
+// This code is adapted from gpiod_cpp by danjperron, available at https://github.com/danjperron/gpiod_cpp.git.
+// Original code is licensed under [license type] (see LICENSE file for details).
+
 #pragma once
 
 #define PIN_MAX 28

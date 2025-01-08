@@ -1,5 +1,5 @@
 #include "gpio.h"
-#include "tb6612fng.h"
+#include "tb6612fng.h" // add to include path ...
 #include <unistd.h>
 
 #define AIN1 12

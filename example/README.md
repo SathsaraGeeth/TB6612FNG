@@ -1,0 +1,1 @@
+This example uses code from [gpiod_cpp](https://github.com/danjperron/gpiod_cpp.git) by [danjperron].
